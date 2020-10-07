@@ -1,0 +1,21 @@
+{% extends "bootstrap/base.html" %}
+{% block html_attribs %} lang="en{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="static/styles.css"/>
+    <script src="https://kit.fontawesome.com/917afb9fde.js" crossorigin="anonymous"></script>
+{% endblock %}
+{% block title %}Flask AWS S3 Browser{% endblock %}
+
+{% block navbar %}
+<div class="container">
+    <div class="navbar">
+        <ul class="nav navbar-nav">
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+        </ul>
+</div>
+</div>
+{% endblock %}
+
+<div class="container">{% block content %}{% endblock %}</div>

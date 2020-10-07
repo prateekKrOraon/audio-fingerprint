@@ -1,0 +1,27 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+pyaudio = "*"
+click = "==7.1.2"
+flask = "==1.1.2"
+itsdangerous = "==1.1.0"
+markupsafe = "==1.1.1"
+werkzeug = "==1.0.1"
+Jinja2 = "==2.11.2"
+arrow = "*"
+flask-bootstrap = "*"
+numpy = "*"
+pydub = "*"
+scipy = "*"
+matplotlib = "*"
+ffmpeg = "*"
+ffprobe = "*"
+eyed3 = "*"
+
+[requires]
+python_version = "3.7"

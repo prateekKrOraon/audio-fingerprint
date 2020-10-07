@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block title %}S3 Bucket List{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-12-xs">
+        <h3>Songs Database</h3>
+        <hr>
+        <h4>Total Songs = {{ params['songs_count'] }}</h4>
+        <div class="td-buttons">
+          <form class="download-form" action="{{ url_for('browse_songs') }}" method="post">
+            <input type="hidden" name="query" value="0">
+            <button type="submit" class="btn btn-primary">Browse By Title</button>
+          </form>
+          <form class="download-form" action="{{ url_for('browse_album') }}" method="post">
+            <input type="hidden" name="query" value="1">
+            <button type="submit" class="btn btn-primary">Browse By Album</button>
+          </form>
+          <form class="download-form" action="{{ url_for('browse_artist') }}" method="post">
+            <input type="hidden" name="query" value="2">
+            <button type="submit" class="btn btn-primary">Brows By Artist</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

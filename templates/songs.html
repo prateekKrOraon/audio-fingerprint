@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block title %}Songs List{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12-xs">
+                <table class="table table-striped">
+                    <thead>
+                        <th>Title</th>
+                        <th>Artist</th>
+                        <th>Album</th>
+                    </thead>
+                    {% for song in songs %}
+                        <tr>
+                            <td>{{ song[0] }}</td>
+                            <td>{{ song[1] }}</td>
+                            <td>{{ song[2] }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

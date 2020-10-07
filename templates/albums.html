@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block title %}Albums List{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12-xs">
+                <table class="table table-striped">
+                    <thead>
+                        <th>Albums</th>
+                    </thead>
+                    {% for album in albums %}
+                        <tr>
+                            <td>{{ album[0] }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
