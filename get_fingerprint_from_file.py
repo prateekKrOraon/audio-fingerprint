@@ -7,6 +7,18 @@ import eyed3
 
 
 def get_tags(file):
+    """Gets ID3 tags of audio file.
+
+    Process the files from local storage to get ID3 tags.
+
+    Args:
+        file:
+            An audio file.
+
+    Returns:
+        list: Containing song name, artist and album
+    """
+
     audio = eyed3.load(file)
     tags = audio.tag
     garbage_str = [
@@ -76,6 +88,11 @@ def get_tags(file):
 
 
 def run():
+    """Store song data in database.
+
+    Fetches ID3 tags from audio file in local storage and stores them in a MySQL database in AWS server.
+    """
+
     files = os.listdir(MP3_PATH)
     conn, cur = get_conn()
     songs = []

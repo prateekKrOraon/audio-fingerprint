@@ -10,7 +10,7 @@ def get_conn():
     Returns:
         list: Contains connection object and cursor.
     """
-    
+
     conn = pymysql.connect(
         host=MYSQL_HOST,
         port=MYSQL_PORT,
