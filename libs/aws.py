@@ -3,6 +3,14 @@ import pymysql
 
 
 def get_conn():
+    """MySQL connection.
+
+    Connects the MySQL database in AWS server.
+
+    Returns:
+        list: Contains connection object and cursor.
+    """
+    
     conn = pymysql.connect(
         host=MYSQL_HOST,
         port=MYSQL_PORT,
