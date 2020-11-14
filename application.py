@@ -5,7 +5,6 @@ from flask_bootstrap import Bootstrap
 from filters import date_time_format
 from filters import file_type
 from flask import request
-# from legacy.get_fingerprint_from_web import files_from_s3
 from libs.aws import *
 from libs.parse_audio import parse_bytes
 from libs.find_match import find_matches

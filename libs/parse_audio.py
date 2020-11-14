@@ -7,6 +7,25 @@ from pydub.utils import audioop
 
 
 def parse_bytes(bytes_data, format="mp3", offline=False):
+    """Processes the bytes received to extract audio information.
+
+    Extracts audio channels, frame rate and SHA-1 hash digest.
+
+    Args:
+        bytes_data:
+            A bytes stream.
+        format:
+            Audio coding format.
+        offline:
+            If the file is coming from local storage.
+
+    Returns:
+        A dict of Audio information containing channels, frame rate and hash value.
+
+    Raises:
+        audioop.error: An error occurred while processing audio file
+    """
+
     global channels, frame_rate, hash_val
 
     try:
@@ -34,6 +53,20 @@ def parse_bytes(bytes_data, format="mp3", offline=False):
 
 
 def parse_file_hash(bytes, offline, blocksize=2 * 20):
+    """Generates SHA-1 hash of file
+
+    Args:
+        bytes:
+            File object.
+        offline:
+            File coming from local storage or not.
+        blocksize:
+            Size of block to be processed in each iteration while generating hash.
+
+    Returns:
+        str : Hex digest of the file in upper case.
+    """
+
     global file
     s = sha1()
     if offline:

@@ -31,9 +31,9 @@ def find_matches(channel, sampling_rate=DEFAULT_SAMPLING_RATE):
         for split_values in grouper(values, MATCH_STEP_LENGTH):
             counter += 1
             query = '''
-            SELECT upper(HASH), song_id
+            SELECT upper(hash), song_id
             FROM fingerprints
-            WHERE upper(HASH) IN (%s)
+            WHERE upper(hash) IN (%s)
             '''
             split_values = list(split_values)
             lis = ['%s'] * len(split_values)
