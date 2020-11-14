@@ -6,6 +6,20 @@ import pymysql
 
 
 def find_matches(channel, sampling_rate=DEFAULT_SAMPLING_RATE):
+    """Matches audio fingerprints.
+
+    Fingerprints of an audio channel is matched against the stored fingerprints in the database.
+
+    Args:
+        channel:
+            An audio channel. Array of bytes.
+        sampling_rate:
+            Number of samples per second taken to construct a discrete signal.
+
+    Yields:
+        song_id: Song id of matched fingerprint.
+    """
+
     hashes = fingerprint(channel, sampling_rate, matching=True)
     mapper = {}
 
@@ -59,6 +73,22 @@ def find_matches(channel, sampling_rate=DEFAULT_SAMPLING_RATE):
 
 
 def grouper(iterable, n, fill_value=None):
+    """Generates iterator.
+
+    Generates iterables of fingerprints.
+
+    Args:
+        iterable:
+            List of objects to generate iterator.
+        n:
+            Number of iterables
+        fill_value:
+            A value placed in case of missing value from the iterable
+
+    Returns:
+        iterator: Aggregated elements of each iterable
+    """
+
     args = [iter(iterable)] * n
     return (filter(None, values) for values
             in zip_longest(fillvalue=fill_value, *args))
