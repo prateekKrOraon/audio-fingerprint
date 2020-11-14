@@ -18,7 +18,7 @@ def fingerprint(
         min_amp=DEFAULT_AMP_MIN,
         plots=False,
         matching=False):
-    """Generates audio fingerprints
+    """Generates audio fingerprints.
 
     Generates unique hashes called fingerprints to identify audio fragment of a particular frequency at a particular
     time. Fast Fourier transform of audio is used to generate hashes.
@@ -87,7 +87,7 @@ def fingerprint(
 
 
 def generate_peaks(arr2d, min_amp=DEFAULT_AMP_MIN, matching=False):
-    """Finds local maxima
+    """Finds local maxima.
 
     Args:
         arr2d:
