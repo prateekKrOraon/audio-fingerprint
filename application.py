@@ -19,6 +19,14 @@ app.jinja_env.filters['file_type'] = file_type
 
 @app.route('/')
 def index():
+    """Generates index page of website.
+
+    Generates output from a index.html template file based on the Jinja2 engine.
+
+    Returns:
+        render_template: Renders the template file.
+    """
+
     conn, cur = get_conn()
     print("checking data base")
     check = cur.execute("SELECT COUNT(id) FROM songs")
@@ -36,6 +44,15 @@ def index():
 
 @app.route('/', methods=['POST'])
 def browse_songs():
+    """Generates songs list page of website.
+
+    Fetches songs title from database and generates output from a songs.html template file based on the Jinja2 engine.
+
+    Returns:
+        render_template: Renders the template file. If some error occurred while fetching, then a json object is
+        returned.
+    """
+
     conn, cur = get_conn()
     check = cur.execute("SELECT title, artist, album FROM songs")
     if check > 0:
@@ -46,6 +63,16 @@ def browse_songs():
 
 @app.route('/albums', methods=['POST'])
 def browse_album():
+    """Generates albums list page of website.
+
+    Fetches albums from database and generates output from a albums.html template file based on the Jinja2
+    engine.
+
+    Returns:
+        render_template: Renders the template file. If some error occurred while fetching, then a json object is
+        returned.
+    """
+
     conn, cur = get_conn()
     check = cur.execute("SELECT DISTINCT ALBUM FROM songs")
     if check > 0:
@@ -57,17 +84,20 @@ def browse_album():
 
 @app.route('/artists', methods=['POST'])
 def browse_artist():
+    # TODO: Prepare a template file for artists page and fetch artists from database and render it.
     return jsonify({"message": "Artists page"})
-
-
-@app.route('/find_song', methods=['POST'])
-def find_song():
-    file = request.files['file']
-    parse_bytes(file)
 
 
 @app.route('/identify_song', methods=['POST'])
 def identify_song():
+    """Identifies the song.
+
+    Processes the file sent in the request to identify the title, album and artist of song with certain confidence.
+
+    Returns:
+        json: Containing song title, album, artist and confidence.
+    """
+
     file = request.files['file']
     mime_type = "wave"
     if file.mimetype == "audio/mpeg":
@@ -100,11 +130,9 @@ def identify_song():
         song_details = cur.fetchall()
 
         prob = (identified_songs[song_id] / len(matches)) * 100
-        # details = song_details[song_title]
+
         print("\n\nTotal Identified songs = {}".format(len(identified_songs)))
-        # print("\nBest hit\n\n\t{title}\n\t{artist}\n\t{album}\n\nwith {p}% confidence\n\n".format(title=song_title,
-        #                                                                                          artist=details[0],
-        #                                                                                          album=details[1], p=prob))
+
     if file is not None:
         if len(matches) == 0:
             return jsonify({"message": "No Match Found"})
