@@ -18,6 +18,37 @@ def fingerprint(
         min_amp=DEFAULT_AMP_MIN,
         plots=False,
         matching=False):
+    """Generates audio fingerprints
+
+    Generates unique hashes called fingerprints to identify audio fragment of a particular frequency at a particular
+    time. Fast Fourier transform of audio is used to generate hashes.
+
+    Args:
+        channel_samples:
+            An audio channel, list of bytes.
+        sampling_rate:
+            Number of samples per second taken to construct the audio. Related to Nyquist conditions, which effects
+            the ranges of frequencies we can detect.
+        window_size:
+            Size of FFT window, affects frequency granularity.
+        overlap_ratio:
+            Ratio by which each sequential window overlaps the last and the next window. Higher overlap will allow a
+            higher granularity of offset matching, but potentially more fingerprints.
+        fan_value:
+            Degree to which a fingerprint can be paired with its neighbors. Higher will cause more fingerprints,
+            but potentially better accuracy.
+        min_amp:
+            Minimum amplitude in spectrogram in order to be considered a peak. This can be raised to reduce number of
+            fingerprints, but can negatively affect accuracy.
+        plots:
+            Boolean value to instruct plotting of graph of FFT.
+        matching:
+            Boolean to instruct if fingerprints are generated to store in database or used for matching.
+
+    Returns:
+        tuple: Contains hex digest and time offset.
+    """
+
     if plots:
         plt.plot(channel_samples)
         plt.title("{} samples".format(len(channel_samples)))
@@ -56,6 +87,20 @@ def fingerprint(
 
 
 def generate_peaks(arr2d, min_amp=DEFAULT_AMP_MIN, matching=False):
+    """Finds local maxima
+
+    Args:
+        arr2d:
+            Windowed discrete-time Fourier transform of audio.
+        min_amp:
+            Minimum amplitude in spectrogram in order to be considered a peak.
+        matching:
+            Boolean to instruct if peaks are used to generate fingerprints to store in database or used for matching.
+
+    Returns:
+        zip: An iterator of tuples.
+    """
+
     bin_struct = generate_binary_structure(2, 1)
     if matching:
         neighborhood = iterate_structure(bin_struct, 35)
@@ -85,6 +130,20 @@ def generate_peaks(arr2d, min_amp=DEFAULT_AMP_MIN, matching=False):
 
 
 def generate_hashes(peaks, fan_value=DEFAULT_FAN_VALUE):
+    """Generate hashes (fingerprints).
+
+    Generates SHA-1 hex digest of peak frequency and time offset.
+
+    Args:
+        peaks:
+            zip object of local frequency maxima points and time offsets.
+        fan_value:
+            Degree to which a peaks can be paired with its neighbors.
+
+    Yields:
+        tuple: Contains hex digest and time offset.
+    """
+
     peaks_list = list(peaks)
     for i in range(len(peaks_list)):
         for j in range(1, fan_value):
