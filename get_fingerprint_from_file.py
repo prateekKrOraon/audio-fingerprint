@@ -1,5 +1,5 @@
 import os
-from legacy.constants import MP3_PATH
+from libs.constants import MP3_PATH
 from libs.parse_audio import parse_bytes
 from libs.generate_fingerprint import fingerprint
 from libs.db import get_conn

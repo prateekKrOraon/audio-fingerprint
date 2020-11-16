@@ -9,15 +9,15 @@
         <hr>
         <h4>Total Songs = {{ params['songs_count'] }}</h4>
         <div class="td-buttons">
-          <form class="download-form" action="{{ url_for('browse_songs') }}" method="post">
+          <form class="download-form" action="{{ url_for('browse_songs') }}" method="get">
             <input type="hidden" name="query" value="0">
             <button type="submit" class="btn btn-primary">Browse By Title</button>
           </form>
-          <form class="download-form" action="{{ url_for('browse_album') }}" method="post">
+          <form class="download-form" action="{{ url_for('browse_album') }}" method="get">
             <input type="hidden" name="query" value="1">
             <button type="submit" class="btn btn-primary">Browse By Album</button>
           </form>
-          <form class="download-form" action="{{ url_for('browse_artist') }}" method="post">
+          <form class="download-form" action="{{ url_for('browse_artist') }}" method="get">
             <input type="hidden" name="query" value="2">
             <button type="submit" class="btn btn-primary">Brows By Artist</button>
           </form>
