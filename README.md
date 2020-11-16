@@ -82,6 +82,21 @@ mysql_password: 'admin_password'
 mysql_db: 'database_name'
 mysql_port: 'port_number'
 ```
+
+## Running app on localhost
+
+To store audio fingerprints in database:
+
+```
+python get_fingerprint_from_file.py -s localhost
+```
+
+For recording audio and matching from your local machine:
+
+```
+python app_local.py
+```
+
 ## License
 
     MIT License
