@@ -1,11 +1,11 @@
 from libs.generate_fingerprint import fingerprint
-from legacy.constants import *
+from libs.constants import *
 from itertools import zip_longest
+from libs.db import get_conn
 import math
-import pymysql
 
 
-def find_matches(channel, sampling_rate=DEFAULT_SAMPLING_RATE):
+def find_matches(channel, sampling_rate=DEFAULT_SAMPLING_RATE, args='remote'):
     """Matches audio fingerprints.
 
     Fingerprints of an audio channel is matched against the stored fingerprints in the database.
@@ -15,12 +15,14 @@ def find_matches(channel, sampling_rate=DEFAULT_SAMPLING_RATE):
             An audio channel. Array of bytes.
         sampling_rate:
             Number of samples per second taken to construct a discrete signal.
+        args:
+            Either 'localhost' to connect to localhost server or 'remote'
 
     Yields:
         song_id: Song id of matched fingerprint.
     """
 
-    hashes = fingerprint(channel, sampling_rate, matching=True)
+    hashes = fingerprint(channel, sampling_rate)
     mapper = {}
 
     for hash_val, offset in hashes:
@@ -31,14 +33,7 @@ def find_matches(channel, sampling_rate=DEFAULT_SAMPLING_RATE):
     if values is None:
         print("no values")
     else:
-        conn = pymysql.connect(
-            host=MYSQL_HOST,
-            port=MYSQL_PORT,
-            user=MYSQL_USER,
-            password=MYSQL_PASSWORD,
-            db=MYSQL_DB
-        )
-        cur = conn.cursor()
+        conn, cur = get_conn(args)
 
         counter = 0
         print("\nTaking step length of {}\n".format(MATCH_STEP_LENGTH))

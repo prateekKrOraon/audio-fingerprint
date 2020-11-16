@@ -5,7 +5,7 @@ from flask_bootstrap import Bootstrap
 from filters import date_time_format
 from filters import file_type
 from flask import request
-from libs.aws import *
+from libs.db import get_conn
 from libs.parse_audio import parse_bytes
 from libs.find_match import find_matches
 
@@ -27,7 +27,7 @@ def index():
         render_template: Renders the template file.
     """
 
-    conn, cur = get_conn()
+    conn, cur = get_conn('remote')
     print("checking data base")
     check = cur.execute("SELECT COUNT(id) FROM songs")
     rows = ()
@@ -53,7 +53,7 @@ def browse_songs():
         returned.
     """
 
-    conn, cur = get_conn()
+    conn, cur = get_conn('remote')
     check = cur.execute("SELECT title, artist, album FROM songs")
     if check > 0:
         rows = cur.fetchall()
@@ -73,7 +73,7 @@ def browse_album():
         returned.
     """
 
-    conn, cur = get_conn()
+    conn, cur = get_conn('remote')
     check = cur.execute("SELECT DISTINCT ALBUM FROM songs")
     if check > 0:
         rows = cur.fetchall()
@@ -123,7 +123,7 @@ def identify_song():
                 identified_songs[title] = 1
 
         song_id = max(identified_songs, key=identified_songs.get)
-        conn, cur = get_conn()
+        conn, cur = get_conn('remote')
 
         cur.execute("SELECT TITLE, ARTIST, ALBUM FROM songs WHERE ID=%s", song_id)
 

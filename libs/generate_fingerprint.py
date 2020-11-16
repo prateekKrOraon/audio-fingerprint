@@ -6,7 +6,7 @@ from scipy.ndimage.filters import maximum_filter
 from scipy.ndimage.morphology import generate_binary_structure
 from scipy.ndimage.morphology import iterate_structure
 from scipy.ndimage.morphology import binary_erosion
-from legacy.constants import *
+from libs.constants import *
 
 
 def fingerprint(
@@ -16,8 +16,7 @@ def fingerprint(
         overlap_ratio=DEFAULT_OVERLAP_RATIO,
         fan_value=DEFAULT_FAN_VALUE,
         min_amp=DEFAULT_AMP_MIN,
-        plots=False,
-        matching=False):
+        plots=False):
     """Generates audio fingerprints.
 
     Generates unique hashes called fingerprints to identify audio fragment of a particular frequency at a particular
@@ -42,8 +41,6 @@ def fingerprint(
             fingerprints, but can negatively affect accuracy.
         plots:
             Boolean value to instruct plotting of graph of FFT.
-        matching:
-            Boolean to instruct if fingerprints are generated to store in database or used for matching.
 
     Returns:
         tuple: Contains hex digest and time offset.
@@ -57,18 +54,11 @@ def fingerprint(
         plt.show()
         plt.gca().invert_yaxis()
 
-    if matching:
-        arr2d = mlab.specgram(channel_samples,
-                              NFFT=window_size,
-                              Fs=sampling_rate,
-                              window=mlab.window_hanning,
-                              noverlap=int(window_size * 0.5))[0]
-    else:
-        arr2d = mlab.specgram(channel_samples,
-                               NFFT=window_size,
-                               Fs=sampling_rate,
-                               window=mlab.window_hanning,
-                               noverlap=int(window_size * overlap_ratio))[0]
+    arr2d = mlab.specgram(channel_samples,
+                          NFFT=window_size,
+                          Fs=sampling_rate,
+                          window=mlab.window_hanning,
+                          noverlap=int(window_size * overlap_ratio))[0]
 
     if plots:
         plt.plot(arr2d)
@@ -78,15 +68,12 @@ def fingerprint(
     arr2d = 10 * np.log10(arr2d)
     arr2d[arr2d == -np.inf] = 0
 
-    local_maxima = generate_peaks(arr2d, min_amp=min_amp, matching=matching)
+    local_maxima = generate_peaks(arr2d, min_amp=min_amp)
 
-    if matching:
-        return generate_hashes(local_maxima, fan_value=20)
-    else:
-        return generate_hashes(local_maxima, fan_value=fan_value)
+    return generate_hashes(local_maxima, fan_value=fan_value)
 
 
-def generate_peaks(arr2d, min_amp=DEFAULT_AMP_MIN, matching=False):
+def generate_peaks(arr2d, min_amp=DEFAULT_AMP_MIN):
     """Finds local maxima.
 
     Args:
@@ -94,18 +81,13 @@ def generate_peaks(arr2d, min_amp=DEFAULT_AMP_MIN, matching=False):
             Windowed discrete-time Fourier transform of audio.
         min_amp:
             Minimum amplitude in spectrogram in order to be considered a peak.
-        matching:
-            Boolean to instruct if peaks are used to generate fingerprints to store in database or used for matching.
 
     Returns:
         zip: An iterator of tuples.
     """
 
     bin_struct = generate_binary_structure(2, 1)
-    if matching:
-        neighborhood = iterate_structure(bin_struct, 35)
-    else:
-        neighborhood = iterate_structure(bin_struct, PEAK_NEIGHBORHOOD_SIZE)
+    neighborhood = iterate_structure(bin_struct, PEAK_NEIGHBORHOOD_SIZE)
 
     local_max = maximum_filter(arr2d, footprint=neighborhood) == arr2d
 
@@ -138,7 +120,7 @@ def generate_hashes(peaks, fan_value=DEFAULT_FAN_VALUE):
         peaks:
             zip object of local frequency maxima points and time offsets.
         fan_value:
-            Degree to which a peaks can be paired with its neighbors.
+            Degree to which peaks can be paired with its neighbors.
 
     Yields:
         tuple: Contains hex digest and time offset.

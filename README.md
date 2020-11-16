@@ -26,13 +26,31 @@ After installing the above files run the following command
 
     pip install -r requirements.txt
 
+### Error in installing PyAudio in Windows 10
+
+If you face any error in installing PyAudio in Windows 10, follow these instructions.
+
+* Find appropriate `.whl` file from [here](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyaudio), for example mine is `PyAudio-0.2.11-cp37-cp37m-win_amd64.whl` and download it.
+* Go to the folder where it is downloaded and install the `.whl` file with `pip`:
+  ```
+  pip install PyAudio-0.2.11-cp37-cp37m-win_amd64.whl
+  ```
+
 ### Installing ffmpeg
 
-Please refer to the following document [here](ffmpeg-installation.md)
+* __For Windows:__
+  * Download executables from [here](https://ffmpeg.org/download.html)
+  * Add `file_path_to_ffmpeg/bin` to your path variable
+
+* __For Ubuntu:__
+  * `sudo apt install ffmpeg`
+
+* __For installing ffmpeg in AWS EC2 instance__
+  * Please refer to the following document [here](ffmpeg-installation.md)
 
 ## Database Schema and Credentials
 
-Create the following tables
+Create the following tables.
 
 ```sql
 CREATE TABLE

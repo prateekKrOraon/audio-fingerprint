@@ -2,8 +2,9 @@ import os
 from legacy.constants import MP3_PATH
 from libs.parse_audio import parse_bytes
 from libs.generate_fingerprint import fingerprint
-from libs.aws import get_conn
+from libs.db import get_conn
 import eyed3
+import argparse
 
 
 def get_tags(file):
@@ -87,14 +88,18 @@ def get_tags(file):
     return song
 
 
-def run():
+def run(argument):
     """Store song data in database.
 
     Fetches ID3 tags from audio file in local storage and stores them in a MySQL database in AWS server.
+
+    Args:
+        argument:
+            Either 'localhost' to connect to localhost server or 'remote'
     """
 
     files = os.listdir(MP3_PATH)
-    conn, cur = get_conn()
+    conn, cur = get_conn(argument)
     songs = []
     count = 0
     for file in files:
@@ -143,4 +148,10 @@ def run():
 
 
 if __name__ == '__main__':
-    run()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-s', '--server', help="localhost/remote")
+    args = parser.parse_args()
+    if args.server is None:
+        print("run with -s or --server localhost/remote")
+    else:
+        run(args.server)
