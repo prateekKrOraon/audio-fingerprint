@@ -17,7 +17,7 @@ app.jinja_env.filters['date_time_format'] = date_time_format
 app.jinja_env.filters['file_type'] = file_type
 
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
     """Generates index page of website.
 
@@ -42,7 +42,7 @@ def index():
     return render_template('index.html', params=params)
 
 
-@app.route('/', methods=['POST'])
+@app.route('/songs', methods=['GET'])
 def browse_songs():
     """Generates songs list page of website.
 
@@ -61,7 +61,7 @@ def browse_songs():
     return jsonify({"message": "Songs page"})
 
 
-@app.route('/albums', methods=['POST'])
+@app.route('/albums', methods=['GET'])
 def browse_album():
     """Generates albums list page of website.
 
@@ -82,7 +82,7 @@ def browse_album():
     return jsonify({"message": "Albums page"})
 
 
-@app.route('/artists', methods=['POST'])
+@app.route('/artists', methods=['GET'])
 def browse_artist():
     # TODO: Prepare a template file for artists page and fetch artists from database and render it.
     return jsonify({"message": "Artists page"})
